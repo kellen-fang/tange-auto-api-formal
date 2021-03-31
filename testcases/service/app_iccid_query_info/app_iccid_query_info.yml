@@ -1,0 +1,36 @@
+config:
+  name: 物联网卡工具页
+  parameters:
+    username-pwd-platform-iccid-pkgname-push_id-push_channel-version-language: ${parameterize(test_data/normal_device_bind_data.csv)}
+    status_code-ok-status-code-ids:
+      - [200, 1, "ok", 200, 0]
+  base_url: ${ENV(api_url)}
+
+teststeps:
+
+  - name: 获取登录token
+    testcase: testcases/service/app_user_login/app_user_login.yml
+    export:
+      - token
+      - id
+
+  - name: 物联网卡查询
+    request:
+      url: http://static-cn01.tange365.com/app/iccid/query_info
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        iccid: $iccid
+        token: $token
+        pkgname: $pkgname
+        version: $version
+        platform: $platform
+        language: $language
+        user_id: $id
+    validate:
+      - eq: [status_code, $status_code]
+      - eq: [content.ok, $ok]
+      - eq: [content.status, $status]
+      - eq: [content.code, $code]
+      - gt: [content.data.service_bought.0.id, $ids]

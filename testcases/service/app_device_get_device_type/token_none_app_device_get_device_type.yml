@@ -1,0 +1,33 @@
+#config:
+#  name: app通过设备UUID查询设备类型
+#  parameters:
+#    token-uuid-status_code-ok-status-code-msg:
+#      # token 为空
+#      - ["", "4YLR1830YS5V", 401, 0, "error", 51028, "no session token"]
+#      - ["", "4YLR1830YS5V", 401, 0, "error", 51028, "no session token"]
+#      # token 错误
+#      - ["a1594e5f38bfdc3207140b35fd4538f0Yy8nvW:372_app", "RH3S90YNFD6", 401, 0, "error", 51023, "user not login"]
+#      - ["a1594e5f38bfdc3207140b35fd4538f0Yy8nvW:372_app", "RH3S90YNFD6", 401, 0, "error", 51023, "user not login"]
+#    platform: ["ios", "android"]
+#
+#  base_url: ${ENV(test_url)}
+#
+#
+#teststeps:
+#
+#  - name: app通过设备UUID查询设备类型
+#    request:
+#      url:  /app/device/get_device_type
+#      method: POST
+#      headers:
+#        Content-Type: application/json
+#      json:
+#        token: $token
+#        uuid: $uuid
+#    validate:
+#      - eq: [status_code, $status_code]
+#      - eq: [headers.Content-Type, application/json;charset=UTF-8]
+#      - eq: [content.ok, $ok]
+#      - eq: [content.status, $status]
+#      - eq: [content.code, $code]
+#      - eq: [content.msg, $msg]

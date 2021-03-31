@@ -1,0 +1,39 @@
+config:
+  name: 固件版本列表
+  parameters:
+    username-pwd-platform-device_id-pkgname-push_id-push_channel-version-language: ${parameterize(test_data/normal_device_bind_data.csv)}
+    status_code-ok-status-code-ids-idss:
+      - [200, 1, "ok", 200, 0, 0]
+  base_url: ${ENV(api_url)}
+  export: ["token", "version_no"]
+
+teststeps:
+
+  - name: 获取登录token
+    testcase: testcases/service/app_user_login/app_user_login.yml
+    export:
+      - token
+
+  - name: 固件版本列表
+    request:
+      url: version/version_list
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        device_id: $device_id
+        language: $language
+        pkgname: $pkgname
+        platform: $platform
+        token: $token
+        version: $version
+    extract:
+      - version_no: content.data.version_no
+
+    validate:
+      - eq: [status_code, $status_code]
+      - eq: [headers.Content-Type, application/json;charset=UTF-8]
+      - eq: [content.ok, $ok]
+      - eq: [content.status, $status]
+      - eq: [content.code, $code]
+      - gt: [content.data.id, $idss]

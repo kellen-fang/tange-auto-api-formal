@@ -1,0 +1,40 @@
+config:
+  name: 删除告警消息
+  parameters:
+    message_type: ${parameterize(test_data/message_type_data.csv)}
+    username-pwd-platform-pkgname-push_id-push_channel-version-language: ${parameterize(test_data/normal_device_bind_data.csv)}
+    status_code-ok-status-code-ids-token:
+      - [200, 1, "ok", 200, 0, "_app"]
+  base_url: ${ENV(api_url)}
+
+teststeps:
+
+  - name: 告警消息页
+    testcase: testcases/service/app_user_query_alarm_msg/app_user_query_alarm_msg.yml
+    export:
+      - token
+      - msg_id
+
+  - name: 删除告警消息
+    request:
+      url: app/user/delete/alarm_msg
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        del_type: 1
+        language: $language
+        msg_id: $msg_id
+        pkgname: $pkgname
+        platform: $platform
+        token: $token
+        version: $version
+    validate:
+      - eq: [status_code, $status_code]
+      - eq: [headers.Content-Type, application/json;charset=UTF-8]
+      - eq: [content.ok, $ok]
+      - eq: [content.status, $status]
+      - eq: [content.code, $code]
+
+
+

@@ -1,0 +1,7 @@
+username,platform,pwd,pkgname,push_id,push_channel,version,language,device_id,phone
+144444445789,ios,12345678,com.tange365.icam365,26725a2b578f484e8720cc044d95dde9,aliyun,2.7.9.1322,zh-cn,1238492,144444441152
+144444448920,android,12345678,com.tange365.icam365,26725a2b578f484e8720cc044d95dde9,aliyun,2.7.9.1322,zh-cn,1238493,144444442259
+test-7ohp@tange-ai.com,ios,12345678,com.tange365.icam365,26725a2b578f484e8720cc044d95dde9,aliyun,2.7.9.1322,zh-cn,1238494,144444447710
+test-qrpt@tange-ai.com,android,12345678,com.tange365.icam365,26725a2b578f484e8720cc044d95dde9,aliyun,2.7.9.1322,zh-cn,1238495,144444445020
+
+

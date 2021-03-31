@@ -1,0 +1,37 @@
+config:
+  name: 注销用户
+  parameters:
+    username-scene-platform-channel-channel_id-captcha-pwd-language-pkgname-push_id-push_channel-version: ${parameterize(test_data/normal_destroy_data.csv)}
+    status_code-ok-status-code-ids:
+      - [200, 1, "ok", 200, 0]
+  base_url: ${ENV(api_url)}
+
+teststeps:
+
+  - name: 校验验证码
+    testcase: testcases/service/app_user_register/app_user_register.yml
+
+  - name: 获取登录token
+    testcase: testcases/service/app_user_login/app_user_login.yml
+    export:
+      - token
+
+  - name: 注销用户
+    request:
+      url: app/user/destroy
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        token: $token
+        pkgname: $pkgname
+        platform: $platform
+        version: $version
+        language: $language
+    validate:
+      - eq: [status_code, $status_code]
+      - eq: [headers.Content-Type, application/json;charset=UTF-8]
+      - eq: [content.ok, $ok]
+      - eq: [content.status, $status]
+      - eq: [content.code, $code]
+      - gt: [content.data.id, $ids]

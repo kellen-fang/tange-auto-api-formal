@@ -1,0 +1,36 @@
+config:
+  name: 设备警铃列表
+  parameters:
+    username-pwd-platform-pkgname-push_id-push_channel-version-language: ${parameterize(test_data/normal_device_bind_data.csv)}
+    status_code-ok-status-code-ids-ido:
+      - [200, 1, "ok", 200, 0, "0"]
+  base_url: ${ENV(api_url)}
+
+teststeps:
+
+  - name: 获取登录token
+    testcase: testcases/service/app_user_login/app_user_login.yml
+    export:
+      - token
+
+  - name: 设备警铃列表
+    request:
+      url: app/bell/alarm/audio/list
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        pkgname: $pkgname
+        audio_format: g711
+        platform: $platform
+        file_format: wav
+        language: $language
+        version: $version
+        token: $token
+        volume_level: 1
+    validate:
+      - eq: [status_code, $status_code]
+      - eq: [content.ok, $ok]
+      - eq: [content.status, $status]
+      - eq: [content.code, $code]
+      - gt: [content.data.0.id, $ido]

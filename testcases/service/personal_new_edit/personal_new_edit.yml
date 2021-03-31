@@ -1,0 +1,40 @@
+config:
+  name: personal/index
+  parameters:
+    push_params: ${parameterize(test_data/push_params.csv)}
+    username-pwd-platform-device_id-pkgname-push_id-push_channel-version-language: ${parameterize(test_data/normal_device_bind_data.csv)}
+    status_code-ok-status-code-ids-idss:
+      - [200, 1, "ok", 200, 0, "0"]
+  base_url: ${ENV(api_url)}
+
+teststeps:
+
+  - name: 获取登录token
+    testcase: testcases/service/personal_index/personal_index.yml
+    export:
+      - token
+      - is_push
+      - push_interval
+
+  - name: personal/new_edit
+    request:
+      url: personal/new_edit
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        device_id: $device_id
+        is_push: $is_push
+        language: $language
+        pkgname: $pkgname
+        platform: $platform
+        push_interval: $push_interval
+        push_params: [$push_params]
+        token: $token
+        version: $version
+    validate:
+      - eq: [status_code, $status_code]
+      - eq: [content.ok, $ok]
+      - eq: [content.status, $status]
+      - eq: [content.code, $code]
+      - gt: [content.data.id, $idss]

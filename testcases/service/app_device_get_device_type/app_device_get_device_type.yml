@@ -1,0 +1,31 @@
+config:
+  name: app通过设备UUID查询设备类型
+  parameters:
+    username-pwd-platform-uuid-pkgname-push_id-push_channel-version-language: ${parameterize(test_data/normal_device_bind_data.csv)}
+    status_code-ok-status-code-ids-token:
+      - [200, 1, "ok", 200, 0, "_app"]
+  base_url: ${ENV(api_url)}
+
+
+teststeps:
+
+  - name: 获取登录token
+    testcase: testcases/service/app_user_login/app_user_login.yml
+    export:
+      - token
+
+  - name: app通过设备UUID查询设备类型
+    request:
+      url:  /app/device/get_device_type
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        token: $token
+        uuid: $uuid
+    validate:
+      - eq: [status_code, $status_code]
+      - eq: [headers.Content-Type, application/json;charset=UTF-8]
+      - eq: [content.ok, $ok]
+      - eq: [content.status, $status]
+      - eq: [content.code, $code]

@@ -1,0 +1,32 @@
+config:
+  name: 设备调度服务
+  parameters:
+    source-uuid-version-iccid: ${parameterize(test_data/normal_device_data.csv)}
+    status_code-ok-status-code-reg-api-ai:
+      - [200, 1, "ok", 200, "/socket.io/", "http:", "http:"]
+  base_url: ${ENV(ep_url)}
+
+teststeps:
+
+  - name: 调度服务
+    request:
+      url: service
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        source: $source
+        deviceid: $uuid
+        imei:
+        version: $version
+        last:
+        name:
+        iccid: $iccid
+    validate:
+      - eq: [status_code, $status_code]
+      - eq: [content.ok, $ok]
+      - eq: [content.status, $status]
+      - eq: [content.code, $code]
+      - endswith: [content.data.reg, $reg]
+      - startswith: [content.data.api, $api]
+      - startswith: [content.data.ai, $ai]

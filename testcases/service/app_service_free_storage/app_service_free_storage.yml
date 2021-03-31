@@ -1,0 +1,36 @@
+config:
+  name: 免费领取云录像
+  parameters:
+    username-pwd-platform-device_id-pkgname-push_id-push_channel-version-language: ${parameterize(test_data/free_storage_data.csv)}
+    status_code-ok-status-code-ids:
+      - [200, 1, "ok", 200, 0]
+  base_url: ${ENV(api_url)}
+
+teststeps:
+
+  - name: 获取登录token
+    testcase: testcases/service/app_user_login/app_user_login.yml
+    export:
+      - token
+      - id
+
+  - name: 免费领取云录像
+    request:
+      url: http://static-cn01.tange365.com/app/service/free/storage
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        token: $token
+        pkgname: $pkgname
+        platform: $platform
+        version: $version
+        language: $language
+        device_id: $device_id
+        user_id: $id
+    validate:
+      - eq: [status_code, $status_code]
+      - eq: [headers.Content-Type, application/json;charset=UTF-8]
+      - eq: [content.ok, $ok]
+      - eq: [content.status, $status]
+      - eq: [content.code, $code]

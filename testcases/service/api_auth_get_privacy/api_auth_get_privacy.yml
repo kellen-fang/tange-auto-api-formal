@@ -1,0 +1,38 @@
+config:
+  name: tange-iCam365-隐私策略
+  parameters:
+    platform-language: ${parameterize(test_data/normal_forget_data.csv)}
+    status_code-ok-status-code-data:
+      - [200, 1, "ok", 200, "https://"]
+  base_url: ${ENV(api_url)}
+
+
+teststeps:
+
+  - name: 隐私策略
+    request:
+      url: api/auth/get_privacy
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        language: $language
+        platform: $platform
+    extract:
+      - link: content.data
+
+    validate:
+      - eq: [status_code, $status_code]
+      - eq: [content.ok, $ok]
+      - eq: [content.status, $status]
+      - eq: [content.code, $code]
+      - startswith: [content.data, $data]
+
+  - name: 请求data返回的链接
+    request:
+      url: $link
+      method: GET
+      headers:
+        Content-Type: application/json
+    validate:
+      - eq: [status_code, $status_code]

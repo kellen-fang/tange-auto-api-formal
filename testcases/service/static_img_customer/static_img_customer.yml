@@ -1,0 +1,18 @@
+config:
+  name: static/img/customer@2x.cbed55d1.png
+  parameters:
+    status_code: [200]
+  base_url: ${ENV(static_url)}
+
+teststeps:
+
+  - name: static/img/customer@2x.cbed55d1.png
+    request:
+      url: static/img/customer@2x.cbed55d1.png
+      method: GET
+      headers:
+        Content-Type: application/json
+    validate:
+      - eq: [status_code, $status_code]
+
+

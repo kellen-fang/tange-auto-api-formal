@@ -1,0 +1,37 @@
+config:
+  name: tange-iCam365-手机号/邮箱-用户登录
+  parameters:
+    username-pwd-platform-pkgname-push_id-push_channel-version-language: ${parameterize(test_data/normal_device_bind_data.csv)}
+    status_code-ok-status-code-ids-token:
+      - [200, 1, "ok", 200, 0, "_app"]
+  base_url: ${ENV(api_url)}
+  export: ["token", "id"]
+
+teststeps:
+
+  - name: 手机号/邮箱-用户登录
+    request:
+      url: app/user/login
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        pkgname: $pkgname
+        platform: $platform
+        push_id: $push_id
+        push_channel: $push_channel
+        username: $username
+        version: $version
+        language: $language
+        pwd: $pwd
+    extract:
+      - token: content.data.token
+      - id: content.data.id
+    validate:
+      - eq: [status_code, $status_code]
+      - eq: [headers.Content-Type, application/json;charset=UTF-8]
+      - eq: [content.ok, $ok]
+      - eq: [content.status, $status]
+      - eq: [content.code, $code]
+      - gt: [content.data.id, $ids]
+      - endswith: [content.data.token, $token]

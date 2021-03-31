@@ -1,0 +1,27 @@
+config:
+  name: tange-iCam365-我的云录像服务
+  parameters:
+    username-pwd-platform-device_id-pkgname-push_id-push_channel-version-language: ${parameterize(test_data/normal_device_bind_data.csv)}
+    status_code-ok-status-code-ids:
+      - [200, 1, "ok", 200, 0]
+  base_url: ${ENV(api_url)}
+
+teststeps:
+
+  - name: 获取登录token
+    testcase: testcases/service/app_user_login/app_user_login.yml
+    export:
+      - token
+      - id
+
+  - name: 我的云录像服务
+    request:
+      url: /shop/index?user_id=$id&device_id=$device_id&language=$language&pkgname=$pkgname&token=$token&version=$version&platform=$platform
+      method: GET
+      headers:
+        Content-Type: application/json
+
+    validate:
+      - eq: [status_code, $status_code]
+
+

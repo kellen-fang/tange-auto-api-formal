@@ -1,0 +1,25 @@
+config:
+  name: tange-iiCam365 设备获取绑定参数
+  parameters:
+    uuid: ${parameterize(test_data/normal_device_data.csv)}
+    status_code-ok-status-code-ai_uuid:
+      - [200, 1, "ok", 200, "AI"]
+  base_url: ${ENV(DV_test_url)}
+
+teststeps:
+
+  - name: 设备获取绑定参数
+    request:
+      url: device/auth/get_bind_params
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        uuid: $uuid
+    validate:
+      - eq: [status_code, $status_code]
+      - eq: [headers.Content-Type, application/json;charset=UTF-8]
+      - eq: [content.ok, $ok]
+      - eq: [content.status, $status]
+      - eq: [content.code, $code]
+      - startswith: [content.data.ai_uuid, $ai_uuid]

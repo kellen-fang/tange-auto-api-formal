@@ -1,0 +1,60 @@
+#config:
+#  name: app通过设备UUID查询设备类型
+#  parameters:
+#    username-pwd-uuid-status_code-ok-status-code-msg:
+#      # 错误的uuid
+#      - ["14477483359", "12345678",  "IOL2EE600MEG", 201, 0, "error", 51027, "device not exists"]
+#      - ["test-cfbb@tange-ai.com", "12345678", "4YLR1830YS5G", 201, 0, "error", 51027, "device not exists"]
+#      # uuid为空
+#      - ["14477483359", "12345678", "", 201, 0, "error", 51027, "device not exists"]
+#      - ["test-cfbb@tange-ai.com", "12345678", "", 201, 0, "error", 51027, "device not exists"]
+#      # uuid 大于12位（未入库）
+#      - ["14477483359", "12345678", "VKN2BB6WZGXBX", 201, 0, "error", 51027, "device not exists"]
+#      - ["test-cfbb@tange-ai.com", "12345678", "VKN2BB6WZGXBX", 201, 0, "error", 51027, "device not exists"]
+#      # uuid 小于12位（未入库）
+#      - ["14477483359", "12345678", "RH3S90YNFD6", 201, 0, "error", 51027, "device not exists"]
+#      - ["test-cfbb@tange-ai.com", "12345678", "RH3S90YNFD6", 201, 0, "error", 51027, "device not exists"]
+#      # token 为空
+#      - ["", "", "RH3S90YNFD6", 201, 0, "error", 51027, "no session token"]
+#      - ["", "", "RH3S90YNFD6", 201, 0, "error", 51027, "no session token"]
+#    platform: ["ios", "android"]
+#
+#  base_url: ${ENV(test_url)}
+#
+#
+#teststeps:
+#
+#  - name: 获取登录token
+#    request:
+#      url:  app/user/login
+#      method: POST
+#      headers:
+#        Content-Type: application/json
+#      json:
+#        pkgname: com.tange365.icam365
+#        platform: $platform
+#        push_id: 26725a2b578f484e8720cc044d95dde9
+#        push_channel: aliyun
+#        username: $username
+#        version: 2.5.2
+#        language: zh-cn
+#        pwd: $pwd
+#    extract:
+#      - token: content.data.token
+#
+#  - name: app通过设备UUID查询设备类型
+#    request:
+#      url:  /app/device/get_device_type
+#      method: POST
+#      headers:
+#        Content-Type: application/json
+#      json:
+#        token: $token
+#        uuid: $uuid
+#    validate:
+#      - eq: [status_code, $status_code]
+#      - eq: [headers.Content-Type, application/json;charset=UTF-8]
+#      - eq: [content.ok, $ok]
+#      - eq: [content.status, $status]
+#      - eq: [content.code, $code]
+#      - eq: [content.msg, $msg]

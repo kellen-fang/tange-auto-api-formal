@@ -1,0 +1,37 @@
+config:
+  name: 设备列表
+  parameters:
+    username-pwd-platform: ${parameterize(test_data/normal_device_bind_data.csv)}
+    pkgname-push_id-push_channel-version-language: ${parameterize(test_data/common_app_param.csv)}
+    status_code-ok-status-code-ids:
+      - [200, 1, "ok", 200, 0]
+  base_url: ${ENV(api_url)}
+
+teststeps:
+
+  - name: 获取登录token
+    testcase: testcases/service/app_user_login/app_user_login.yml
+    export:
+      - token
+
+  - name: 设备列表
+    request:
+      url: /api/device/list
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        pkgname: $pkgname
+        platform: $platform
+        limit: 200
+        language: $language
+        version: $version
+        token: $token
+        page: 1
+    validate:
+      - eq: [status_code, $status_code]
+      - eq: [content.ok, $ok]
+      - eq: [content.status, $status]
+      - eq: [content.code, $code]
+      - gt: [content.data.items.0.id, $ids]
+

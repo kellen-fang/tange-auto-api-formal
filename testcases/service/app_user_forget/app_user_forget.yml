@@ -1,0 +1,34 @@
+config:
+  name: 忘记密码
+  parameters:
+    username-scene-platform-channel-channel_id-captcha-pwd-language-pkgname-push_id-push_channel-version: ${parameterize(test_data/normal_forget_data.csv)}
+    status_code-ok-status-code:
+      - [200, 1, "ok", 200]
+  base_url: ${ENV(api_url)}
+teststeps:
+
+  - name: 校验验证码
+    testcase: testcases/service/app_user_captcha_verify/app_user_captcha_verify.yml
+
+  - name: 忘记密码
+    request:
+      url: app/user/forget
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        pkgname: $pkgname
+        platform: $platform
+        push_id: $push_id
+        push_channel: $push_channel
+        username: $username
+        version: $version
+        captcha: $captcha
+        language: $language
+        pwd: $pwd
+    validate:
+      - eq: [status_code, $status_code]
+      - eq: [headers.Content-Type, application/json;charset=UTF-8]
+      - eq: [content.ok, $ok]
+      - eq: [content.status, $status]
+      - eq: [content.code, $code]

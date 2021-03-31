@@ -1,0 +1,45 @@
+config:
+  name: 查询紧急联系人
+  parameters:
+    username-pwd-platform-device_id-phone-language-push_id-push_channel-version-pkgname: ${parameterize(test_data/urgent_contact.csv)}
+    status_code-ok-status-code-ids:
+      - [200, 1, "ok", 200, 0]
+  base_url: ${ENV(api_url)}
+  export: ["idss", "token", "id"]
+
+teststeps:
+
+  - name: 获取登录token
+    testcase: testcases/service/app_user_login/app_user_login.yml
+    export:
+      - token
+      - id
+
+  - name: 查询紧急联系人
+    request:
+      url: /app/device/emergency/get
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        pkgname: $pkgname
+        platform: $platform
+        push_id: $push_id
+        push_channel: $push_channel
+        language: $language
+        version: $version
+        token: $token
+        user_id: $id
+        device_id: $device_id
+    extract:
+      - idss: content.data.0.id
+
+    validate:
+      - eq: [status_code, $status_code]
+      - eq: [headers.Content-Type, application/json;charset=UTF-8]
+      - eq: [content.ok, $ok]
+      - eq: [content.status, $status]
+      - eq: [content.code, $code]
+
+
+

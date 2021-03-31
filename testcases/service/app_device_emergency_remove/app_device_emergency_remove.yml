@@ -1,0 +1,38 @@
+config:
+  name: 查询紧急联系人
+  parameters:
+    username-pwd-platform-device_id-phone-language-push_id-push_channel-version-pkgname: ${parameterize(test_data/urgent_contact.csv)}
+    status_code-ok-status-code-ids:
+      - [200, 1, "ok", 200, 0]
+  base_url: ${ENV(api_url)}
+
+teststeps:
+
+  - name: 查询紧急联系人
+    testcase: testcases/service/app_device_emergency_get/app_device_emergency_get.yml
+    export:
+      - idss
+      - token
+
+  - name: 移除紧急联系人
+    request:
+      url: app/device/emergency/remove
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        pkgname: $pkgname
+        platform: $platform
+        language: $language
+        version: $version
+        token: $token
+        user_id: $id
+        emergency_id: $idss
+        device_id: $device_id
+
+    validate:
+      - eq: [status_code, $status_code]
+      - eq: [headers.Content-Type, application/json;charset=UTF-8]
+      - eq: [content.ok, $ok]
+      - eq: [content.status, $status]
+      - eq: [content.code, $code]

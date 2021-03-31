@@ -1,0 +1,36 @@
+config:
+  name: 修改密码
+  parameters:
+    username-pwd-platform-pwd-new-old-pkgname-push_id-push_channel-version-language: ${parameterize(test_data/normal_device_bind_data.csv)}
+    status_code-ok-status-code-ids:
+      - [200, 1, "ok", 200, 0]
+  base_url: ${ENV(api_url)}
+
+teststeps:
+
+  - name: 校验密码
+    testcase: testcases/service/app_user_password_verify/app_user_password_verify.yml
+    export:
+      - token
+
+  - name: 修改密码
+    request:
+      url: app/user/change_pwd
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        language: $language
+        new: $new
+        old: $old
+        pkgname: $pkgname
+        platform: $platform
+        push_channel: $push_channel
+        push_id: $push_id
+        token: $token
+        version: $version
+    validate:
+      - eq: [status_code, $status_code]
+      - eq: [content.ok, $ok]
+      - eq: [content.status, $status]
+      - eq: [content.code, $code]

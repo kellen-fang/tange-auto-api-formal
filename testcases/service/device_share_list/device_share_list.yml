@@ -1,0 +1,40 @@
+config:
+  name: 设备分享列表
+  parameters:
+    username-pwd-platform-device_id-pkgname-push_id-push_channel-version-language: ${parameterize(test_data/normal_device_bind_data.csv)}
+    status_code-ok-status-code-ids:
+      - [200, 1, "ok", 200, 0, "0"]
+  base_url: ${ENV(api_url)}
+  export: ["token", "phone", "email", "id"]
+
+teststeps:
+
+  - name: 获取登录token
+    testcase: testcases/service/app_user_login/app_user_login.yml
+    export:
+      - token
+      - id
+
+  - name: 设备分享列表
+    request:
+      url: device/share_list
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        device_id: $device_id
+        language: $language
+        pkgname: $pkgname
+        platform: $platform
+        token: $token
+        version: $version
+    extract:
+      - phone: content.data.0.phone
+      - email: content.data.0.email
+
+    validate:
+      - eq: [status_code, $status_code]
+      - eq: [headers.Content-Type, application/json;charset=UTF-8]
+      - eq: [content.ok, $ok]
+      - eq: [content.status, $status]
+      - eq: [content.code, $code]

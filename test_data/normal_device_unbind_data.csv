@@ -1,0 +1,13 @@
+username,platform,pwd,uuid,add_type,pkgname,push_id,push_channel,version,language
+144444445789,ios,12345678,355H4D4DQYDY,scan,com.tange365.icam365,26725a2b578f484e8720cc044d95dde9,aliyun,2.7.9.1322,zh-cn
+144444445789,ios,12345678,355VUFUDGWC6,lan,com.tange365.icam365,26725a2b578f484e8720cc044d95dde9,aliyun,2.7.9.1322,en
+144444445789,ios,12345678,355D2PDP5ZMD,scan,com.tange365.icam365,26725a2b578f484e8720cc044d95dde9,aliyun,2.7.9.1322,zh-cn
+144444448920,android,12345678,355LBH8C95A9,scan,com.tange365.icam365,26725a2b578f484e8720cc044d95dde9,aliyun,2.7.9.1322,zh-cn
+144444448920,android,12345678,355G87DKSZM5,lan,com.tange365.icam365,26725a2b578f484e8720cc044d95dde9,aliyun,2.7.9.1322,en
+144444448920,android,12345678,3555QJR5MN3F,scan,com.tange365.icam365,26725a2b578f484e8720cc044d95dde9,aliyun,2.7.9.1322,zh-cn
+test-7ohp@tange-ai.com,ios,12345678,3556QVA2K67T,scan,com.tange365.icam365,26725a2b578f484e8720cc044d95dde9,aliyun,2.7.9.1322,zh-cn
+test-7ohp@tange-ai.com,ios,12345678,355RX8Y4V454,lan,com.tange365.icam365,26725a2b578f484e8720cc044d95dde9,aliyun,2.7.9.1322,en
+test-7ohp@tange-ai.com,ios,12345678,355VS3MJNATL,scan,com.tange365.icam365,26725a2b578f484e8720cc044d95dde9,aliyun,2.7.9.1322,zh-cn
+test-qrpt@tange-ai.com,android,12345678,355MKP7NA7DN,scan,com.tange365.icam365,26725a2b578f484e8720cc044d95dde9,aliyun,2.7.9.1322,zh-cn
+test-qrpt@tange-ai.com,android,12345678,355863FRQTUC,lan,com.tange365.icam365,26725a2b578f484e8720cc044d95dde9,aliyun,2.7.9.1322,en
+test-qrpt@tange-ai.com,android,12345678,355XVSPGY6Z4,scan,com.tange365.icam365,26725a2b578f484e8720cc044d95dde9,aliyun,2.7.9.1322,zh-cn

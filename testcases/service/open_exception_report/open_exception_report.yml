@@ -1,0 +1,42 @@
+config:
+  name: tange-iCam365-open/exception_report
+  parameters:
+    username-pwd-platform-pkgname-push_id-push_channel-version-language: ${parameterize(test_data/normal_device_bind_data.csv)}
+    status_code-ok-status-code-ids:
+      - [200, 1, "ok", 200, 0, "0"]
+  base_url: ${ENV(api_url)}
+
+teststeps:
+
+  -
+    name: 获取登录token
+    testcase: testcases/service/app_user_login/app_user_login.yml
+    export:
+      - token
+
+  -
+    name: open/exception_report
+    request:
+      url: open/exception_report
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        detail": P2P_LIVE_PWD_START  p2p:TANGE-023483-CPWJB uuid:1C01FU6691QE revTime:15:05:510
+        function_module: APP端
+        language: $language
+        level: NORMAL
+        path: Camera/command
+        pkgname: $pkgname
+        platform: $platform
+        source: $platform
+        title: P2p_live
+        token: $token
+        version: $version
+    validate:
+      - eq: [status_code, $status_code]
+      - eq: [headers.Content-Type, application/json;charset=UTF-8]
+      - eq: [content.ok, $ok]
+      - eq: [content.status, $status]
+      - eq: [content.code, $code]
+

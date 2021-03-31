@@ -1,0 +1,38 @@
+config:
+  name: 创建电子围栏
+  parameters:
+    username-pwd-platform-uuid-pkgname-push_id-push_channel-version-language: ${parameterize(test_data/normal_device_bind_data.csv)}
+    status_code-ok-status-code-ids:
+      - [200, 1, "ok", 200, 0]
+  base_url: ${ENV(api_url)}
+
+teststeps:
+
+  - name: 获取登录token
+    testcase: testcases/service/app_user_login/app_user_login.yml
+    export:
+      - token
+
+  - name: 创建电子围栏
+    request:
+      url: app/geofence/create
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        center: 114.06338638913459,22.66348470750846
+        id: 4661
+        language: $language
+        pkgname: $pkgname
+        platform: $platform
+        radius: 5000
+        switch: 1
+        token: $token
+        uuid: $uuid
+        version: $version
+    validate:
+      - eq: [status_code, $status_code]
+      - eq: [headers.Content-Type, application/json;charset=UTF-8]
+      - eq: [content.ok, $ok]
+      - eq: [content.status, $status]
+      - eq: [content.code, $code]

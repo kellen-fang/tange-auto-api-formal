@@ -1,0 +1,73 @@
+config:
+  name: tange-iiCam365 设备启动交互流程
+  parameters:
+    # 调度服务器->获取当前服务器时间->设备激活->设备获取绑定状态->设备获取绑定参数->设置设备P2P连接密码
+    source-version-iccid-uuid-actived-password: ${parameterize(test_data/normal_device_data.csv)}
+    status_code-ok-status-code:
+      - [ 200, 1, "ok", 200]
+
+teststeps:
+
+  - name: 调度服务
+    request:
+      url: http://ep.test.tange365.com/service
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        source: $source
+        deviceid: $uuid
+        version: $version
+        iccid: $iccid
+
+  - name: 获取当前服务器时间
+    request:
+      url: http://device-test.tange365.com/device/record/time
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+
+  - name: 激活设备
+    request:
+      url: http://device-test.tange365.com/device/auth/active
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        uuid: $uuid
+        actived: $actived
+
+  - name: 设备获取绑定状态
+    request:
+      url: http://device-test.tange365.com/device/auth/get_bind_status
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        uuid: $uuid
+
+  - name: 设备获取绑定参数
+    request:
+      url: http://device-test.tange365.com/device/auth/get_bind_params
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        uuid: $uuid
+
+  - name: 设置设备P2P连接密码
+    request:
+      url: http://device-test.tange365.com/device/auth/password
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        uuid: $uuid
+        password: $password
+    validate:
+      - eq: [status_code, $status_code]
+      - eq: [headers.Content-Type, application/json;charset=UTF-8]
+      - eq: [content.ok, $ok]
+      - eq: [content.status, $status]
+      - eq: [content.code, $code]

@@ -1,0 +1,8 @@
+message_type
+sound
+body
+motion
+"sound,body"
+"body,motion"
+"sound,motion"
+"sound,body,motion

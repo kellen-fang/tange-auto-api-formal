@@ -1,0 +1,7 @@
+username,scene,pwd,platform,pkgname,push_id,push_channel,version,language,channel,channel_id,captcha
+144444448486,REGISTER,12345678,ios,com.tange365.icam365,26725a2b578f484e8720cc044d95dde9,aliyun,2.7.9.1322,zh-cn,"","",657619
+144444445338,REGISTER,12345678,android,com.tange365.icam365,26725a2b578f484e8720cc044d95dde9,aliyun,2.7.9.1322,zh-te,"","",657619
+test-wyu6g@tange-ai.com,REGISTER,12345678,ios,com.tange365.icam365,26725a2b578f484e8720cc044d95dde9,aliyun,2.7.9.1322,zh-cn,"","",657619
+test-2ne5i@tange-ai.com,REGISTER,12345678,android,com.tange365.icam365,26725a2b578f484e8720cc044d95dde9,aliyun,2.7.9.1322,en,"","",657619
+
+

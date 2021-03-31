@@ -1,0 +1,37 @@
+config:
+  name: 设备解绑
+  parameters:
+    username-pwd-platform-uuid-add_type-pkgname-push_id-push_channel-version-language: ${parameterize(test_data/normal_device_unbind_data.csv)}
+    status_code-ok-status-code-ids-device_id:
+      - [200, 1, "ok", 200, 0, 0]
+
+  base_url: ${ENV(api_url)}
+
+teststeps:
+
+  - name: App发起绑定
+    testcase: testcases/service/api_device_bind/api_device_bind.yml
+    export:
+      - token
+      - id
+
+  - name: 设备解绑
+    request:
+      url: /device/unbind
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        version: $version
+        language: $language
+        platform: $platform
+        device_id: $id
+        token: $token
+        pkgname: $pkgname
+
+    validate:
+      - eq: [status_code, $status_code]
+      - eq: [headers.Content-Type, application/json;charset=UTF-8]
+      - eq: [content.ok, $ok]
+      - eq: [content.status, $status]
+      - eq: [content.code, $code]

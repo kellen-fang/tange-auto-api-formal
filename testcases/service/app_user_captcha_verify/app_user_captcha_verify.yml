@@ -1,0 +1,33 @@
+config:
+  name: 校验验证码
+  parameters:
+    username-scene-platform-channel-channel_id-captcha-language-pkgname-push_id-push_channel-version: ${parameterize(test_data/normal_captcha_data.csv)}
+    status_code-ok-status-code:
+      - [200, 1, "ok", 200]
+  base_url: ${ENV(api_url)}
+
+teststeps:
+
+  - name: 获取发送验证码
+    testcase: testcases/service/app_user_captcha_send/app_user_captcha_send.yml
+
+  - name: 校验验证码
+    request:
+      url: /app/user/captcha/verify
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        username: $username
+        scene: $scene
+        captcha: $captcha
+        platform: $platform
+        version: $version
+        language: $language
+        pkgname: $pkgname
+    validate:
+      - eq: [status_code, $status_code]
+      - eq: [headers.Content-Type, application/json;charset=UTF-8]
+      - eq: [content.ok, $ok]
+      - eq: [content.status, $status]
+      - eq: [content.code, $code]

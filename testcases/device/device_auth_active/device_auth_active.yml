@@ -1,0 +1,29 @@
+config:
+  name: tange-iiCam365 激活设备
+  parameters:
+    uuid-actived: ${parameterize(test_data/normal_device_data.csv)}
+    status_code-ok-status-code-data:
+      - [200, 1, "ok", 200, "active success"]
+  base_url: ${ENV(DV_test_url)}
+
+teststeps:
+
+  - name: 激活设备
+    request:
+      url: device/auth/active
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        uuid: $uuid
+        actived: $actived
+#        device_type: $device_type
+#        iccid: $iccid
+#        connect_way: $connect_way
+    validate:
+      - eq: [status_code, $status_code]
+      - eq: [headers.Content-Type, application/json;charset=UTF-8]
+      - eq: [content.ok, $ok]
+      - eq: [content.status, $status]
+      - eq: [content.code, $code]
+      - eq: [content.data, $data]

@@ -1,0 +1,35 @@
+config:
+  name: 修改账户昵称
+  parameters:
+    username-pwd-platform-nickname-pkgname-push_id-push_channel-version-language: ${parameterize(test_data/normal_device_bind_data.csv)}
+    status_code-ok-status-code-ids-idss:
+      - [200, 1, "ok", 200, 0, "0"]
+  base_url: ${ENV(api_url)}
+
+teststeps:
+
+  -
+    name: 获取登录token
+    testcase: testcases/service/app_user_login/app_user_login.yml
+    export:
+      - token
+
+  - name: 修改账户昵称
+    request:
+      url: personal/modifyname
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        language: $language
+        nickname: $nickname
+        pkgname: com.tange365.icam365
+        platform: $platform
+        token: $token
+        version: 2.7.9
+    validate:
+      - eq: [status_code, $status_code]
+      - eq: [content.ok, $ok]
+      - eq: [content.status, $status]
+      - eq: [content.code, $code]
+      - gt: [content.data.id, $idss]

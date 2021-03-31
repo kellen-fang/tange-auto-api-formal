@@ -1,0 +1,36 @@
+config:
+  name: 帮助详情——方案
+  parameters:
+    username-pwd-platform-pkgname-push_id-push_channel-version-language: ${parameterize(test_data/normal_device_bind_data.csv)}
+    status_code-ok-status-code-ids:
+      - [200, 1, "ok", 200, 0]
+  base_url: ${ENV(static_url)}
+
+teststeps:
+
+  - name: 帮助中心——添加设备
+    testcase: testcases/service/app_help_list/app_help_list.yml
+    export:
+      - token
+      - id
+      - de_id
+
+  - name: 帮助中心——添加设备-列表方案
+    request:
+      url: app/help/detail
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        id: $de_id
+        token: $token
+        pkgname: $pkgname
+        version: $version
+        platform: $platform
+        language: $language
+        user_id: $id
+    validate:
+      - eq: [status_code, $status_code]
+      - eq: [content.ok, $ok]
+      - eq: [content.status, $status]
+      - eq: [content.code, $code]

@@ -1,0 +1,23 @@
+config:
+  name: 设备上报日志
+  parameters:
+    uuid: ${parameterize(test_data/normal_device_bind_data.csv)}
+    status_code-ok-status-code-ids:
+      - [200, 1, "ok", 200, 0]
+  base_url: ${ENV(api_url)}
+
+teststeps:
+
+  - name: 设备上报日志
+    request:
+      url: app/device/report
+      method: POST
+      headers:
+        Content-Type: application/json
+      json:
+        uuid: $uuid
+    validate:
+      - eq: [status_code, $status_code]
+      - eq: [content.ok, $ok]
+      - eq: [content.status, $status]
+      - eq: [content.code, $code]
